@@ -1,6 +1,6 @@
 import { IUser } from 'interfaces'
 import md5 from 'md5'
-// import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import User from '../models/user'
 
 export function encryptPassword(password: string) {
@@ -18,23 +18,23 @@ export function isValidPassword(password: string) {
   return false
 }
 
-// export async function generateToken(data) {
-//   const { email, password } = data
-//   return jwt.sign({ email, password }, process.env.GLOBAL_SAL_KEY, {
-//     expiresIn: '1d',
-//   })
-// }
+export async function generateToken(data: IUser) {
+  const { email, password } = data
+  const { SECRET } = process.env
+  return jwt.sign({ email, password }, SECRET || '', { expiresIn: '1d' })
+}
 
-// export async function decodeToken(token) {
-//   return jwt.decode(token, process.env.GLOBAL_SAL_KEY)
-// }
+export async function decodeToken(token: string) {
+  const secret = (process.env.SECRET || '') as string & { json: true }
+  return jwt.decode(token, secret)
+}
 
-// export function verifyToken(token) {
-//   return jwt.verify(token, process.env.GLOBAL_SAL_KEY, (error, decode) => {
-//     if (error) return { error }
-//     return { decode }
-//   })
-// }
+export function verifyToken(token: string) {
+  return jwt.verify(token, process.env.SECRET || '', (error, decode) => {
+    if (error) return { error }
+    return { decode }
+  })
+}
 
 export async function getUserByEmailAndPassword(email: string, password: string) {
   const user = await User.findOne({ email, password: encryptPassword(password) })
