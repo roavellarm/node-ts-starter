@@ -1,8 +1,8 @@
-import { Response, Request } from 'express'
+import { RequestParamHandler } from 'express'
 import { createUser } from '../utils'
 import { registerValidation, loginValidation } from '../validators/auth'
 
-export const register = async (req: Request, res: Response) => {
+export const register: RequestParamHandler = async (req, res) => {
   try {
     const { errors } = await registerValidation(req.body)
     if (errors.length) return res.status(404).send({ errors })
@@ -14,7 +14,7 @@ export const register = async (req: Request, res: Response) => {
   }
 }
 
-export const login = async (req: Request, res: Response) => {
+export const login: RequestParamHandler = async (req, res) => {
   try {
     const { errors, user } = await loginValidation(req.body)
     if (errors.length) return res.status(404).send({ errors })
