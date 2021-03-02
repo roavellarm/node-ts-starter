@@ -1,7 +1,7 @@
 import { IUser } from 'interfaces'
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
-import User from '../models/user'
+import User from '../models/User'
 
 export function encryptPassword(password: string) {
   return md5(password, process.env.SECRET as string & { asBytes: true })
@@ -18,7 +18,8 @@ export function isValidPassword(password: string) {
   return false
 }
 
-export async function generateToken(data: IUser) {
+export async function generateToken(data: IUser | undefined) {
+  if (!data) throw Error(`Generate token error`)
   const { email, password } = data
   const { SECRET } = process.env
   return jwt.sign({ email, password }, SECRET || '', { expiresIn: '1d' })
@@ -36,23 +37,26 @@ export function verifyToken(token: string) {
   })
 }
 
+const USER_FIELDS = 'firstname lastname email'
+
 export async function getUserByEmailAndPassword(email: string, password: string) {
-  const user = await User.findOne({ email, password: encryptPassword(password) })
+  const user = await User.findOne({ email, password: encryptPassword(password) }, USER_FIELDS)
   return user
 }
 
 export async function getUserByEmail(email: string) {
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email }, USER_FIELDS)
   return user
 }
 
 export async function createUser(data: IUser) {
   const { firstname, lastname, email, password } = data
-  const user = await User.create({
+  const currentUser = await User.create({
     firstname,
     lastname,
     email,
     password: encryptPassword(password),
   })
+  const user = (currentUser as unknown) as IUser
   return user
 }

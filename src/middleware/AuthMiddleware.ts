@@ -1,8 +1,8 @@
-import { RequestParamHandler } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { verifyToken, getUserByEmail } from '../utils'
 import { setCurrentUser } from '../globalVariables'
 
-export const isAuthorized: RequestParamHandler = (req, res, next) => {
+export function isAuthorized(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.token as string
 
   if (!token) return res.status(401).send({ error: 'User not authorized' })

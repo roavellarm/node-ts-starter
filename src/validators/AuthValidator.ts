@@ -1,8 +1,10 @@
 import { isValidEmail, isValidPassword, getUserByEmail, getUserByEmailAndPassword } from '../utils'
 import { IUser } from '../interfaces'
 
+type IErrors = string[]
+
 export async function registerValidation(data: IUser) {
-  const errors: string[] = []
+  const errors: IErrors = []
   const { email, password } = data
 
   if (!isValidEmail(email)) errors.push('Invalid email')
@@ -18,8 +20,13 @@ export async function registerValidation(data: IUser) {
   return { errors }
 }
 
-export async function loginValidation(data: IUser) {
-  const errors: string[] = []
+interface LoginValidationResponseData {
+  errors: IErrors
+  user?: IUser
+}
+
+export async function loginValidation(data: IUser): Promise<LoginValidationResponseData> {
+  const errors: IErrors = []
   const { email, password } = data
 
   if (!isValidEmail(email)) errors.push('Invalid email')
@@ -29,9 +36,11 @@ export async function loginValidation(data: IUser) {
 
   if (errors.length) return { errors }
 
-  const user = await getUserByEmailAndPassword(email, password)
+  const userExists = await getUserByEmailAndPassword(email, password)
 
-  if (!user) errors.push('User not found')
+  if (!userExists) errors.push('User not found')
+
+  const user = (userExists as unknown) as IUser
 
   return { errors, user }
 }
