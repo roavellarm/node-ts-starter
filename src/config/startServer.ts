@@ -1,7 +1,7 @@
-import express from 'express'
+import express, { Router } from 'express'
 import cors from 'cors'
 
-export default function startServer(port: string, routes: any) {
+export default function startServer(port: string, routes: Router[]) {
   if (!port) throw Error(`Port is required to start server`)
   if (!routes) throw Error(`Routes are required to start server`)
 
