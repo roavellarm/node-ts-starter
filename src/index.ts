@@ -3,8 +3,9 @@ import { connectDataBase, startServer } from './config'
 import routes from './routes'
 
 dotenv.config()
-const { DATA_BASE, PORT } = process.env
 
-connectDataBase(String(DATA_BASE))
+const { DATABASE, PORT } = process.env
 
-startServer(PORT || '8000', routes)
+connectDataBase(String(DATABASE))
+
+startServer(PORT || '5000', routes)

@@ -36,11 +36,9 @@ export async function loginValidation(data: IUser): Promise<LoginValidationRespo
 
   if (errors.length) return { errors }
 
-  const userExists = await getUserByEmailAndPassword(email, password)
+  const user = await getUserByEmailAndPassword(email, password)
 
-  if (!userExists) errors.push('User not found')
-
-  const user = (userExists as unknown) as IUser
+  if (!user) errors.push('User not found')
 
   return { errors, user }
 }

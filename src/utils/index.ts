@@ -3,20 +3,17 @@ import md5 from 'md5'
 import jwt from 'jsonwebtoken'
 import User from '../models/User'
 
-export function encryptPassword(password: string) {
-  return md5(password, process.env.SECRET as string & { asBytes: true })
-}
+const emailPattern =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-export function isValidEmail(email: string) {
-  // eslint-disable-next-line no-useless-escape
-  return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
-}
+const passwordPattern = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/
 
-export function isValidPassword(password: string) {
-  const valid = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/
-  if (valid.test(password)) return true
-  return false
-}
+export const encryptPassword = (password: string) =>
+  md5(password, process.env.SECRET as string & { asBytes: true })
+
+export const isValidEmail = (email: string) => emailPattern.test(email)
+
+export const isValidPassword = (password: string) => passwordPattern.test(password)
 
 export async function generateToken(data: IUser | undefined) {
   if (!data) throw Error(`Generate token error`)
@@ -57,6 +54,6 @@ export async function createUser(data: IUser) {
     email,
     password: encryptPassword(password),
   })
-  const user = (currentUser as unknown) as IUser
+  const user = currentUser as unknown as IUser
   return user
 }
