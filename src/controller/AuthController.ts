@@ -18,7 +18,7 @@ export async function register(req: Request, res: Response) {
 
     return res.status(200).json({ user, token })
   } catch (error) {
-    return res.status(400).send(error)
+    return res.status(400).send({ message: 'Unexpected Error' })
   }
 }
 
@@ -32,6 +32,6 @@ export async function login(req: Request, res: Response) {
 
     return res.status(200).json({ user, token })
   } catch (error) {
-    return res.status(400).send(error)
+    return res.status(400).send({ message: 'Unexpected Error' })
   }
 }
