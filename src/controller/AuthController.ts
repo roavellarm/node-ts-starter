@@ -14,7 +14,6 @@ export async function register(req: Request, res: Response) {
 
     const token = await generateToken(user)
 
-    // TODO: add to email service contact lists
     await registerConfirmationEmail(user)
 
     return res.status(200).json({ user, token })
