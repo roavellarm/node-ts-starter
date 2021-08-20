@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
-import { createUser, generateToken } from '../utils'
+
 import { registerValidation, loginValidation } from '../validators/AuthValidator'
+import { registerConfirmationEmail } from '../emails/registerConfirmationEmail'
+import { createUser, generateToken } from '../utils'
 
 export async function register(req: Request, res: Response) {
   try {
@@ -12,9 +14,11 @@ export async function register(req: Request, res: Response) {
 
     const token = await generateToken(user)
 
+    await registerConfirmationEmail(user)
+
     return res.status(200).json({ user, token })
   } catch (error) {
-    return res.status(400).send(error)
+    return res.status(400).send({ message: 'Unexpected Error' })
   }
 }
 
@@ -28,6 +32,6 @@ export async function login(req: Request, res: Response) {
 
     return res.status(200).json({ user, token })
   } catch (error) {
-    return res.status(400).send(error)
+    return res.status(400).send({ message: 'Unexpected Error' })
   }
 }

@@ -8,4 +8,4 @@ const { DATABASE, PORT } = process.env
 
 connectDataBase(String(DATABASE))
 
-startServer(PORT || '5000', routes)
+startServer(PORT || '3333', routes)
