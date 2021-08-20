@@ -8,4 +8,4 @@ const { DATABASE, PORT } = process.env
 
 _config.connectDataBase.call(void 0, String(DATABASE))
 
-_config.startServer.call(void 0, PORT || '5000', _routes2.default)
+_config.startServer.call(void 0, PORT || '3333', _routes2.default)

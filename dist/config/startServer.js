@@ -10,5 +10,5 @@ var _cors = require('cors'); var _cors2 = _interopRequireDefault(_cors);
   app.use(_cors2.default.call(void 0, ))
   app.use(routes)
 
-  app.listen(port, () => console.log(`⚡ Server is running on port ${port} 🎉`)) // eslint-disable-line
+  app.listen(port, () => console.log(`⚡ Server is running on port ${port}`)) // eslint-disable-line
 } exports.default = startServer;
