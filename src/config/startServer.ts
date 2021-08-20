@@ -10,5 +10,5 @@ export default function startServer(port: string, routes: Router[]) {
   app.use(cors())
   app.use(routes)
 
-  app.listen(port, () => console.log(`⚡ Server is running on port ${port} 🎉`)) // eslint-disable-line
+  app.listen(port, () => console.log(`⚡ Server is running on port ${port}`)) // eslint-disable-line
 }
