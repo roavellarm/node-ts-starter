@@ -1,11 +1,13 @@
-import dotenv from 'dotenv'
+/* eslint-disable no-console */
+// eslint-disable-next-line no-unused-vars
 import { connectDataBase, startServer } from './config'
-import routes from './routes'
+import routes from './routes/authRoutes'
+import Frete from './frete'
 
-dotenv.config()
+const { PORT } = process.env
 
-const { DATABASE, PORT } = process.env
+Frete()
 
-connectDataBase(String(DATABASE))
+// connectDataBase(String(DATABASE))
 
 startServer(PORT || '3333', routes)
