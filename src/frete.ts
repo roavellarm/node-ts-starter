@@ -1,60 +1,25 @@
-// 'http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?
-// nCdEmpresa=08082650&sDsSenha=564321
-// &sCepOrigem=90410003
-// &sCepDestino=93340040
-// &nVlPeso=1
-// &nCdFormato=1
-// &nVlComprimento=20
-// &nVlAltura=20
-// &nVlLargura=20
-// &sCdMaoPropria=n
-// &nVlValorDeclarado=0
-// &sCdAvisoRecebimento=n
-// &nCdServico=04510
-// &nVlDiametro=0
-// &StrRetorno=xml
-// &nIndicaCalculo=3'
+/* eslint-disable no-console */
+import { calcularPrecoPrazo } from 'correios-brasil'
 
-import $ from 'ajax'
+// const CepOrigem = '93340-040'
 
-export default function calcWsCorreios() {
-  const sendjson = {
-    nCdEmpresa: '',
-    sDsSenha: '',
-    nCdServico: '41106',
-    sCepOrigem: '37540000',
-    sCepDestino: '37540000',
+function Frete() {
+  const args = {
+    // Não se preocupe com a formatação dos valores de entrada do cep, qualquer uma será válida (ex: 21770-200, 21770 200, 21asa!770@###200 e etc),
+    sCepOrigem: '93340-040',
+    sCepDestino: '91110-000',
     nVlPeso: '1',
     nCdFormato: '1',
     nVlComprimento: '20',
-    nVlAltura: '5',
-    nVlLargura: '15',
+    nVlAltura: '20',
+    nVlLargura: '20',
+    nCdServico: ['04014', '04510'], // Array com os códigos de serviço
     nVlDiametro: '0',
-    sCdMaoPropria: 's',
-    nVlValorDeclarado: '200',
-    sCdAvisoRecebimento: 's',
   }
 
-  const response =
-    "http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo/nCdEmpresa:sDsSenha: '',nCdServico: '41106',sCepOrigem: '37540000',sCepDestino: '37540000',nVlPeso: '1',nCdFormato: '1',nVlComprimento: '20',nVlAltura: '5',nVlLargura: '15',nVlDiametro: '0',sCdMaoPropria: 's',nVlValorDeclarado: '200',sCdAvisoRecebimento: 's'"
-
-  console.log(response)
-
-  $.ajax({
-    type: 'GET',
-    contentType: 'application/json; charset=utf-8',
-    url: 'http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo',
-    data: sendjson,
-    dataType: 'json',
-    jsonpCallback: 'foo',
-    success(data) {
-      console.log(data)
-    },
-    error(data, err) {
-      console.log(data)
-      console.log(err)
-    },
+  calcularPrecoPrazo(args).then((response) => {
+    console.log(response)
   })
-
-  return $
 }
+
+export default Frete
